@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public bool isGameActive;
     public int difficulty;
     private int lives;
+    private bool paused;
+    public GameObject pauseScreen;
 
     public List<GameObject> targets;
     public TextMeshProUGUI scoreText;
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI gameOverText;  
     public Button restartButton;
     public GameObject titleScreen;
+    public AudioSource music;
     
 
     // Start is called before the first frame update
@@ -27,9 +30,27 @@ public class GameManager : MonoBehaviour
        
     }
 
+    void ChangePaused()
+    {
+        if (!paused)
+        {
+            paused = true;
+            pauseScreen.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            paused = false;
+            pauseScreen.SetActive(false);
+            Time.timeScale = 1;
+        }
+    }
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ChangePaused();
+        }
     }
     IEnumerator SpawnTarget()
     {
@@ -51,6 +72,7 @@ public class GameManager : MonoBehaviour
     {
         restartButton.gameObject.SetActive(true);
         gameOverText.gameObject.SetActive(true);
+        music.Stop();
         isGameActive = false;
     }
     
